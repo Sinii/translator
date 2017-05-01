@@ -1,0 +1,81 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.titmouse.anton.translator.ui.TranslateFragment"
+    android:orientation="vertical">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="12dp"
+                android:id="@+id/translate_language_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:text="@string/auto_language"
+                />
+
+
+            <Spinner
+                android:layout_margin="8dp"
+                android:id="@+id/translate_language_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                />
+
+            <EditText
+                android:layout_margin="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/translate_translate_edit_text"
+                android:hint="@string/translate_edit_text_hint"
+                android:layout_below="@+id/translate_language_spinner"/>
+            <ImageView
+
+                android:id="@+id/translate_favorite_imageview"
+
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/favorite_0"
+                android:layout_below="@+id/translate_translate_edit_text"
+                android:layout_alignParentEnd="true"/>
+
+
+            <TextView
+                android:layout_margin="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/translate_translate_text_view"
+                android:layout_below="@+id/translate_translate_edit_text"
+                android:layout_toLeftOf="@+id/translate_favorite_imageview"/>
+
+            <TextView
+                android:paddingTop="16dp"
+                android:layout_margin="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/translate_by"
+                android:id="@+id/translate_hyperlink_text_view"
+                android:layout_below="@+id/translate_translate_text_view"
+                android:textColorLink="#A3A3A3"
+                />
+
+
+
+        </RelativeLayout>
+
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+</LinearLayout>
