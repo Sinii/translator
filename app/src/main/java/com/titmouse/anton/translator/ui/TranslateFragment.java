@@ -1,15 +1,12 @@
 package com.titmouse.anton.translator.ui;
 
 
-
 import android.os.Bundle;
-
 import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,119 +26,130 @@ import com.titmouse.anton.translator.translate.presenter.TranslatePresenterImpl;
 import com.titmouse.anton.translator.translate.view.TranslateView;
 
 
-public class TranslateFragment extends MvpFragment<TranslateView, TranslatePresenter> implements  TranslateView {
-
-    private EditText mTranslateEditText;
-    private TextView mTranslateTextView;
-    private ImageView mFavoriteImage;
-    private Spinner mSpinner;
-    private Translate mTranslate = new Translate();
-    private int mLanguageSelect = 3;
-    private Boolean mFavorite = false;
-
-    private static final int ENGLISH_SPINNER = 3;
-
-
-    public TranslateFragment() {
-
-    }
-
-    @NonNull
-    @Override public TranslatePresenter createPresenter() {
-        return new TranslatePresenterImpl(getContext());
-    }
-
-    @Override public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                       Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.fragment_translate, container, false);
-
-        mTranslate.setFavorite(false);
-
-        mSpinner = (Spinner) rootView.findViewById(R.id.translate_language_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.language_name_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        mSpinner.setAdapter(adapter);
-        mSpinner.setSelection(ENGLISH_SPINNER);
-
-        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mLanguageSelect = position;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        TextView mHyperLink = (TextView) rootView.findViewById(R.id.translate_hyperlink_text_view);
-        mHyperLink.setMovementMethod(LinkMovementMethod.getInstance());
-        mHyperLink.setText(Html.fromHtml(getResources().getString(R.string.translate_by)));
-
-        mFavoriteImage = (ImageView) rootView.findViewById(R.id.translate_favorite_imageview);
-        mFavoriteImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                mFavorite = !mFavorite;
-                mTranslate.setFavorite(mFavorite);
-                if (mTranslate.getFavorite()) {
-                    mFavoriteImage.setImageDrawable(getResources().getDrawable(R.drawable.favorite_1));
-                } else  {
-                    mFavoriteImage.setImageDrawable(getResources().getDrawable(R.drawable.favorite_0));
-                }
-                if (mTranslate!=null && mTranslate.getTranslate() !=null && !mTranslate.getTranslate().isEmpty()) presenter.buttonNewSaveStatus(mTranslate);
-            }
-        });
-        mTranslateTextView = (TextView) rootView.findViewById(R.id.translate_translate_text_view);
-        mTranslateEditText = (EditText) rootView.findViewById(R.id.translate_translate_edit_text);
-        mTranslateEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mFavorite = false;
-                mFavoriteImage.setImageDrawable(getResources().getDrawable(R.drawable.favorite_0));
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.toString().length()>0) {
-                    presenter.onTranslateTextChanged(s.toString(), getResources().getStringArray(R.array.language_value_array)[mLanguageSelect], mFavorite);
-                }
-            }
-        });
-        return rootView;
-    }
-
-
-    @Override public void showTranslate (Translate translate) {
-        mTranslateTextView.setText(translate.getTranslate());
-        mTranslate = translate;
-
-
-    }
-
-    @Override public void showNewSaveStatus(Boolean saved) {
-        if (saved) mFavoriteImage.setImageDrawable(getResources().getDrawable(R.drawable.favorite_1)); else
-            mFavoriteImage.setImageDrawable(getResources().getDrawable(R.drawable.favorite_0));
-
-    }
-
-    @Override
-    public void showError(String text) {
-        Toast.makeText(getContext(), R.string.error_connection, Toast.LENGTH_SHORT).show();
-    }
-
+public class TranslateFragment extends MvpFragment<TranslateView, TranslatePresenter> implements TranslateView {
+	
+	private TextView mTranslateTextView;
+	private ImageView mFavoriteImage;
+	private Translate mTranslate = new Translate();
+	private int mLanguageSelect = 3;
+	private Boolean mFavorite = false;
+	
+	private static final int ENGLISH_SPINNER = 3;
+	
+	
+	public TranslateFragment() {
+	
+	}
+	
+	@NonNull
+	@Override
+	public TranslatePresenter createPresenter() {
+		return new TranslatePresenterImpl(getContext());
+	}
+	
+	@Override
+	public void onCreate(final Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
+	
+	@Override
+	public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+		final Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
+		final View rootView = inflater.inflate(R.layout.fragment_translate, container, false);
+		
+		mTranslate.setFavorite(false);
+		
+		final Spinner spinner = rootView.findViewById(R.id.translate_language_spinner);
+		final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+			R.array.language_name_array, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		
+		spinner.setAdapter(adapter);
+		spinner.setSelection(ENGLISH_SPINNER);
+		
+		spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			
+			@Override
+			public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
+				mLanguageSelect = position;
+			}
+			
+			@Override
+			public void onNothingSelected(final AdapterView<?> parent) {
+				
+			}
+		});
+		
+		TextView mHyperLink = (TextView) rootView.findViewById(R.id.translate_hyperlink_text_view);
+		mHyperLink.setMovementMethod(LinkMovementMethod.getInstance());
+		mHyperLink.setText(Html.fromHtml(getResources().getString(R.string.translate_by)));
+		
+		mFavoriteImage = (ImageView) rootView.findViewById(R.id.translate_favorite_imageview);
+		mFavoriteImage.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				mFavorite = !mFavorite;
+				mTranslate.setFavorite(mFavorite);
+				if (mTranslate.getFavorite()) {
+					mFavoriteImage.setImageDrawable(getResources().getDrawable(R.drawable.favorite_1));
+				} else {
+					mFavoriteImage.setImageDrawable(getResources().getDrawable(R.drawable.favorite_0));
+				}
+				if (mTranslate != null && mTranslate.getTranslate() != null && !mTranslate.getTranslate().isEmpty()) {
+					presenter.buttonNewSaveStatus(mTranslate);
+				}
+			}
+		});
+		mTranslateTextView = rootView.findViewById(R.id.translate_translate_text_view);
+		final EditText translateEditText = rootView.findViewById(R.id.translate_translate_edit_text);
+		translateEditText.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {
+				
+			}
+			
+			@Override
+			public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
+				mFavorite = false;
+				mFavoriteImage.setImageDrawable(getResources().getDrawable(R.drawable.favorite_0));
+			}
+			
+			@Override
+			public void afterTextChanged(final Editable s) {
+				if (s.toString().length() > 0) {
+					presenter.onTranslateTextChanged(s.toString(), getResources().getStringArray(R.array.language_value_array)[mLanguageSelect], mFavorite);
+				}
+			}
+		});
+		return rootView;
+	}
+	
+	
+	@Override
+	public void showTranslate(final Translate translate) {
+		mTranslateTextView.setText(translate.getTranslate());
+		mTranslate = translate;
+		
+		
+	}
+	
+	@Override
+	public void showNewSaveStatus(final Boolean saved) {
+		if (saved) {
+			mFavoriteImage.setImageDrawable(getResources().getDrawable(R.drawable.favorite_1));
+		} else {
+			mFavoriteImage.setImageDrawable(getResources().getDrawable(R.drawable.favorite_0));
+		}
+		
+	}
+	
+	@Override
+	public void showError(final String text) {
+		Toast.makeText(getContext(), R.string.error_connection, Toast.LENGTH_SHORT).show();
+	}
+	
 }
